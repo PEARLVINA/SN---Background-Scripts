@@ -1,0 +1,11 @@
+var gr = new GlideRecord('incident');
+var string='active=true^state!=3^sys_domain=fc06737b0a0a3c12392df2f12c73a914^caller_idLIKEguest'; //Replace your Query here
+gr.addEncodedQuery(string)
+gr.query();
+while(gr.next())
+{
+gr.setWorkflow(false); //This would not allow any Notifications to get trigger while closing
+gr.autoSysFields(false);
+gr.state = 7; //Replace your Closed State value here
+gr.update();
+}
