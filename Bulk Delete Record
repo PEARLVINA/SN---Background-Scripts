@@ -1,0 +1,13 @@
+removeComputers();
+function removeComputers() {
+ var gr = new GlideRecord("cmdb_rel_ci");
+ gr.addEncodedQuery('sys_created_by=user'); // Change preferred query
+ gr.query();
+ var deleteCount = 0;
+ while(gr.next()){
+gr.setWorkflow(false);
+// gr.deleteRecord(); // Remove comment is ready to delete records
+ deleteCount++;
+ }
+ gs.print('Records Deleted: '+ deleteCount);
+}
