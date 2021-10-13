@@ -5,7 +5,7 @@ gr.query();
 while(gr.next())
 {
 gr.setWorkflow(false); //This would not allow any Notifications to get trigger while closing
-gr.autoSysFields(false);
+gr.autoSysFields(false); //Do not update system fields
 gr.state = 7; //Replace your Closed State value here
 gr.update();
 }
