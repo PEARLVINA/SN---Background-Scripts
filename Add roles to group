@@ -1,0 +1,12 @@
+var grp = new GlideRecord('sys_user_group');
+
+grp.addEncodedQuery('nameLIKEbusiness approver^ORnameLIKEprocurement^ORnameLIKElegal^ORnameLIKEfinance^ORnameLIKEbusiness unit^ORnameLIKEemt'); 
+grp.query(); //Copy query
+while(grp.next()){
+var gr = new GlideRecord('sys_group_has_role');
+gr.Initialize();
+gr.group = grp.sys_id;
+gr.role = 'debab85bff02110053ccffffffffffb6'; //Role sys_id
+gr.insert();
+
+}
