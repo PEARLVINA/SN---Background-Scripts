@@ -1,0 +1,10 @@
+var gr = new GlideRecord("sc_req_item");
+gr.addQuery("sys_id", "<sys_id>"); // sys_id of request
+gr.query();
+if (gr.next()) {
+gr.variables.<name of variable> == ''
+gr.update();
+new Workflow().restartWorkflow(gr);
+}
+
+// NOTE: After running the workflow, add a comment on the RITM
