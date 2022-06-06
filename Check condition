@@ -1,0 +1,12 @@
+checkCondition();
+function checkCondition(){
+var user = new GlideRecord('sys_user'); //Replace table
+user.get(gs.getUserID()); // Replace query
+if (user.u_employeetype=="Employee") //Replace field and field value
+{
+     gs.log("true");
+}
+return false;
+}
+
+// This specific code is for checking current logged in details
