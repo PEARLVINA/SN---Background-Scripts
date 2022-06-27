@@ -10,3 +10,5 @@ gr.role = 'debab85bff02110053ccffffffffffb6'; //Role sys_id
 gr.insert();
 
 }
+
+setUseEngines // Disregard data policies
