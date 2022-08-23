@@ -1,0 +1,11 @@
+//ADD RECORD TO UPDATE SET
+//Query for the record
+var rec = new GlideRecord('<table name>');
+rec.addEncodedQuery('<add encoded query>');
+//rec.setLimit(1); //Set limit for testing purposes
+rec.query();
+
+while (rec.next()) {
+    var um = new GlideUpdateManager2();
+    um.saveRecord(rec); 
+}
