@@ -1,0 +1,26 @@
+//glide record on a table and glide aggregate to incident table and get COUNT of Incidents on the query then update the 
+
+syncAssignedIncidents();
+
+function syncAssignedIncidents() {
+
+	var groups = gs.getProperty('<system property>'); // get groups
+	
+    var usr = new GlideRecord('sys_user');
+    usr.query();
+    while (usr.next()) {
+        var userInc = new GlideAggregate('incident');
+        userInc.addQuery('assigned_to', usr.sys_id);
+        userInc.addQuery('state', 2);
+        userInc.addQuery('assignment_group', 'IN', groups);
+        userInc.addAggregate('COUNT');
+        userInc.query();
+
+        var userIncidents = 0;
+        while (userInc.next()) {
+            userIncidents = userInc.getAggregate('COUNT');
+            usr.u_assigned_incidents = userIncidents; //Field on user table
+        }
+        usr.update();
+    }
+}
