@@ -1,0 +1,7 @@
+(function runAction(/*GlideRecord*/ current, /*GlideRecord*/ event, /*EmailWrapper*/ email, /*ScopedEmailLogger*/ logger, /*EmailClassifier*/ classifier) {
+
+	// Implement email action here
+	current.comments = "reply from: " + email.origemail + "\n\n" + email.body_text;
+	current.update();
+
+})(current, event, email, logger, classifier);
