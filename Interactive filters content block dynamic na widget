@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<style>                
+
+</style>
+
+<script>
+
+     var my_dashboardMessageHandler = new DashboardMessageHandler("FilterDeparment");
+
+    function publishFilter (searchTerm) {
+        var filter_message = {};
+        filter_message.id = "FilterDeparment";
+        filter_message.table = "sn_hr_core_case";
+
+     if (searchTerm == ""){
+     clearFilter();
+     } 
+     else {
+     filter_message.filter = "departmentSTARTSWITH"+ searchTerm;
+     }
+        SNC.canvas.interactiveFilters.setDefaultValue({
+                id: filter_message.id,
+                filters: [filter_message]
+            }, false);
+        my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
+    }
+
+    function clearFilter() {
+        var filter_message = {};
+        filter_message.id = "FilterDeparment";
+        filter_message.table = "sn_hr_core_case";
+        filter_message.filter = "";
+        SNC.canvas.interactiveFilters.setDefaultValue({
+                id: filter_message.id,
+                filters: [filter_message]
+            }, false);
+        my_dashboardMessageHandler.removeFilter();
+    }
+</script>   
+
+<input id="searchTerm" type="text" class="form-control" value="" onchange="publishFilter(this.value);"></input>
+
+</j:jelly>
