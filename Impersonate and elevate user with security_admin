@@ -1,0 +1,57 @@
+var originalUserID = gs.getUserID();
+var securityAdminUserID = gs.getProperty('catalog.request_privileged_access.security_admin_user');
+var catalogID = gs.getProperty('catalog.request_privileged_access.sys_id');
+ 
+// Impersonate user with security_admin role
+gs.getSession().impersonate(securityAdminUserID);
+ 
+// Elevate to security_admin
+GlideSecurityManager.get().enableElevatedRole('security_admin');
+ 
+// Grant access
+var grRequestedItems = new GlideRecord('sc_req_item');
+grRequestedItems.addEncodedQuery('sys_updated_onONLast minute@javascript:gs.beginningOfLastMinute()@javascript:gs.endOfLastMinute()');
+grRequestedItems.addQuery('cat_item', catalogID);
+grRequestedItems.addQuery('stage', 'granting_access');
+grRequestedItems.addActiveQuery();
+grRequestedItems.query();
+while(grRequestedItems.next()) {
+    var userId = grRequestedItems.variables.v_requested_for;
+    var requestedAccess =  grRequestedItems.variables.v_requested_access;
+ 
+    var groupId = '';
+ 
+    if(requestedAccess == 'security_admin') {
+        groupId = 'e6902f001b95ca5078fa8485624bcbe1'; // Privileged Access Grant Security Admin
+    }
+    else if(requestedAccess == 'admin') {
+        groupId = '57a02fcc1b55ca5078fa8485624bcb87'; // Privileged Access Grant Admin
+    }
+    else if(requestedAccess == 'user_admin') {
+        groupId = '86b02fcc1b55ca5078fa8485624bcb89'; // Privileged Access Grant User Admin
+    }
+    else if(requestedAccess == 'approval_admin') {
+        groupId = '71c0e7401b95ca5078fa8485624bcb31'; // Privileged Access Grant Approval Admin
+    }
+    else if(requestedAccess == 'impersonator') {
+        groupId = '9bd063801b95ca5078fa8485624bcb31'; // Privileged Access Grant Impersonator
+    }
+ 
+    // Add user to group
+    var grGroupMember = new GlideRecord('sys_user_grmember');
+    grGroupMember.initialize();
+    grGroupMember.user = userId;
+    grGroupMember.group = groupId;
+ 
+    var groupMemberID = grGroupMember.insert();
+ 
+    // If Grant is successful
+    if(groupMemberID) {
+        // Update requested item to move it to the next flow step
+        grRequestedItems.setValue('stage', 'access_granted');
+        grRequestedItems.update();
+    }
+}
+ 
+// Impersonate original user
+gs.getSession().impersonate(originalUserID);
