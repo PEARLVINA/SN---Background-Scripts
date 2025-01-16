@@ -1,0 +1,23 @@
+var gr = new GlideRecord('<table>'); //Update table name
+var numbers = {};
+var duplicateNumbers = [];
+gr.addEncodedQuery(<query>) //Add encoded query
+gr.query();
+
+while (gr.next()) {
+    var number = gr.getValue('number'); //Get Unique value that is being duplicated
+
+    if (numbers[number]) {
+        if (gr.indexOf(number) === -1) {
+            gr.push(number);
+        }
+    } else {
+        numbers[number] = true;
+    }
+}
+
+if (duplicateNumbers.length > 0) {
+    gs.info('Duplicate Numbers: ' + gr.join(', '));
+} else {
+    gs.info('No duplicates found.');
+}
